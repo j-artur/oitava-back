@@ -31,25 +31,6 @@ import dev.jartur.oitava.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-@AllArgsConstructor
-class SignUpRequest {
-  @NonNull
-  @NotNull(message = "Nome é obrigatório")
-  public String nome;
-  @NotNull(message = "Email é obrigatório")
-  public String email;
-  @NotNull(message = "Senha é obrigatória")
-  public String senha;
-}
-
-@AllArgsConstructor
-class SignInRequest {
-  @NotNull(message = "Email é obrigatório")
-  public String email;
-  @NotNull(message = "Senha é obrigatória")
-  public String senha;
-}
-
 @RestController
 @RequestMapping
 public class AuthController {
@@ -65,14 +46,11 @@ public class AuthController {
 
   @PostMapping("/signup")
   public ResponseEntity<User> signup(@RequestBody SignUpRequest request) {
-    System.out.println("aaaaaaaaaaaaaaaaaa");
 
     User user = new User();
     user.setNome(request.nome);
     user.setEmail(request.email);
     user.setSenha(request.senha);
-
-    System.out.println(user);
 
     return ResponseEntity.ok(userService.save(user));
   }
@@ -101,11 +79,28 @@ public class AuthController {
   public ResponseEntity<User> me(HttpServletRequest request) {
     String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    System.out.println(email);
-
     User user = userService.findByEmail(email);
 
     return ResponseEntity.ok(user);
   }
 
+}
+
+@AllArgsConstructor
+class SignUpRequest {
+  @NonNull
+  @NotNull(message = "Nome é obrigatório")
+  public String nome;
+  @NotNull(message = "Email é obrigatório")
+  public String email;
+  @NotNull(message = "Senha é obrigatória")
+  public String senha;
+}
+
+@AllArgsConstructor
+class SignInRequest {
+  @NotNull(message = "Email é obrigatório")
+  public String email;
+  @NotNull(message = "Senha é obrigatória")
+  public String senha;
 }

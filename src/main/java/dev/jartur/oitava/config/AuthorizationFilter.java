@@ -52,7 +52,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
 					String email = decodedJWT.getSubject();
 
-					System.out.println("email: " + email);
 					String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
 					Collection<SimpleGrantedAuthority> authorities = Arrays.stream(roles)
 							.map(SimpleGrantedAuthority::new).collect(Collectors.toList());
@@ -60,7 +59,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 					var authenticationToken = new UsernamePasswordAuthenticationToken(email, null, authorities);
 					SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-					System.out.println("token: " + authenticationToken);
 					filterChain.doFilter(request, response);
 				} catch (Exception e) {
 					e.printStackTrace();
