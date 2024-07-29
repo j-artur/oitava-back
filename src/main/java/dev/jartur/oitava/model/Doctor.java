@@ -11,6 +11,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Entity
@@ -52,6 +54,7 @@ public class Doctor {
   @NotNull
   private String email;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "medico")
   private List<Appointment> agendamentos = new ArrayList<>();
 

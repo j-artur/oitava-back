@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import dev.jartur.oitava.util.Sexo;
 import lombok.Data;
 
@@ -57,6 +59,7 @@ public class Patient {
 
   private String observacoes;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "paciente")
   private List<Appointment> agendamentos = new ArrayList<>();
 
