@@ -1,6 +1,6 @@
 package dev.jartur.oitava.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class Patient {
   private Sexo sexo;
 
   @NotNull
-  private Date nascimento;
+  private LocalDate nascimento;
 
   @NotNull
   @Column(unique = true)

@@ -27,6 +27,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 
 import dev.jartur.oitava.config.SecurityConfig;
 import dev.jartur.oitava.model.User;
+import dev.jartur.oitava.repository.UserRepository;
 import dev.jartur.oitava.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -44,8 +45,17 @@ public class AuthController {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private UserRepository userRepository;
+
   @PostMapping("/signup")
-  public ResponseEntity<User> signup(@RequestBody SignUpRequest request) {
+  public ResponseEntity<?> signup(@RequestBody SignUpRequest request) {
+    var existingUser = userRepository.findByEmail(request.email);
+    if (existingUser.isPresent()) {
+      Map<String, String> response = new HashMap<>();
+      response.put("message", "E-mail já cadastrado");
+      return ResponseEntity.badRequest().body(response);
+    }
 
     User user = new User();
     user.setNome(request.nome);
