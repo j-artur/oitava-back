@@ -1,15 +1,18 @@
 package dev.jartur.oitava.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import dev.jartur.oitava.util.Sex;
+import dev.jartur.oitava.util.Sexo;
 import lombok.Data;
 
 @Entity
@@ -25,10 +28,10 @@ public class Patient {
   private String nome;
 
   @NotNull
-  private Sex sex;
+  private Sexo sexo;
 
   @NotNull
-  private Date birthdate;
+  private Date nascimento;
 
   @NotNull
   @Column(unique = true)
@@ -53,4 +56,12 @@ public class Patient {
   private String email;
 
   private String observacoes;
+
+  @OneToMany(mappedBy = "paciente")
+  private List<Appointment> agendamentos = new ArrayList<>();
+
+  public void addAppointment(Appointment appointment) {
+    agendamentos.add(appointment);
+    appointment.setPaciente(this);
+  }
 }
