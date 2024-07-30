@@ -2,7 +2,6 @@ package dev.jartur.oitava.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,12 +23,12 @@ public class Appointment {
   private Long id;
 
   @NotNull
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "medico_id")
   private Doctor medico;
 
   @NotNull
-  @ManyToOne(cascade = CascadeType.ALL)
+  @ManyToOne
   @JoinColumn(name = "paciente_id")
   private Patient paciente;
 
