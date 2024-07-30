@@ -67,22 +67,28 @@ public class AuthController {
 
   @PostMapping("/signin")
   public ResponseEntity<Map<String, String>> signin(@RequestBody SignInRequest request) {
-    Authentication authentication = authenticationManager
-        .authenticate(new UsernamePasswordAuthenticationToken(request.email, request.senha));
-    var user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-    Algorithm algorithm = Algorithm.HMAC256(Base64.getDecoder().decode(SecurityConfig.JWT_SECRET));
+    try {
+      Authentication authentication = authenticationManager
+          .authenticate(new UsernamePasswordAuthenticationToken(request.email, request.senha));
+      var user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+      Algorithm algorithm = Algorithm.HMAC256(Base64.getDecoder().decode(SecurityConfig.JWT_SECRET));
 
-    String accessToken = JWT.create()
-        .withSubject(user.getUsername())
-        .withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
-        .withClaim("roles",
-            user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-        .sign(algorithm);
+      String accessToken = JWT.create()
+          .withSubject(user.getUsername())
+          .withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+          .withClaim("roles",
+              user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+          .sign(algorithm);
 
-    Map<String, String> response = new HashMap<>();
-    response.put("accessToken", accessToken);
+      Map<String, String> response = new HashMap<>();
+      response.put("accessToken", accessToken);
 
-    return ResponseEntity.ok(response);
+      return ResponseEntity.ok(response);
+    } catch (Exception e) {
+      Map<String, String> response = new HashMap<>();
+      response.put("message", "Credenciais inválidas");
+      return ResponseEntity.badRequest().body(response);
+    }
   }
 
   @GetMapping("/me")
